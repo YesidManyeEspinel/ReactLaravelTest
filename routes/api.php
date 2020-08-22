@@ -19,5 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/navigation', 'ApiController@navigation');
-Route::get('/client', 'ApiController@client');
+Route::get('/client/{filter?}', 'ApiController@client');
 Route::post('/client', 'ApiController@store');
+Route::post('/state', 'ApiController@update');

@@ -5,7 +5,7 @@ import swal from 'sweetalert';
 
 const AddClient = () => {
     const [ error, setError ] = useState(null);
-    const [ message, setMessage] = useState('');
+    const [ message, setMessage] = useState(''); 
     const [ form, setForm] = useState({name:'',nickname:'',email:'',phone:'',age:''});
 
     const handleSubmit = async (e) =>{

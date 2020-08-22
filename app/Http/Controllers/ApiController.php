@@ -16,9 +16,14 @@ class ApiController extends Controller
     	//dd($Navs);
     	return response()->json($Navs);
     }
-    public function client()
+    public function client($filter)
     {
-    	$Dato = Client::select('id','name','nickname','email','phone','age')->get();
+        if ($filter == 'all') {
+            $Dato = Client::select('id','name','nickname','email','phone','age','state')->get();
+        }else{
+            $Dato = Client::select('id','name','nickname','email','phone','age','state')->where('state','=',$filter)->get();
+        }
+    	
     	//dd($Dato);
     	return response()->json($Dato);
     }
@@ -28,6 +33,21 @@ class ApiController extends Controller
         $client->save();
 
         return response()->json($client,201);
+    }
+
+    public function update(Request $request)
+    {
+        $Client = Client::find($request->state);
+        
+        if ($Client->state == 'on') {
+            $Client->state = 'off';
+        }else{
+            $Client->state = 'on';
+        }
+
+        $Client->save();
+
+        return response()->json($Client,201);
     }
     
 }
