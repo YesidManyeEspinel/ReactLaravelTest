@@ -71692,7 +71692,7 @@ var AddClient = function AddClient() {
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "container center"
+    className: "container card shadow p-2 mb-4 bg-white rounded"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_form__WEBPACK_IMPORTED_MODULE_3__["default"], {
     form: form,
     onChange: handleChange,
@@ -71867,7 +71867,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _UrlApp__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UrlApp */ "./resources/js/components/UrlApp.js");
 /* harmony import */ var _tablelist__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./tablelist */ "./resources/js/components/tablelist.js");
-/* harmony import */ var _pagination__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pagination */ "./resources/js/components/pagination.js");
+/* harmony import */ var _paginationCopy__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./paginationCopy */ "./resources/js/components/paginationCopy.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 
 
@@ -71895,6 +71895,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+ //import Pagination from './pagination';
 
 
 
@@ -71926,26 +71927,32 @@ var ListClient = function ListClient() {
   var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])('all'),
       _useState10 = _slicedToArray(_useState9, 2),
       filter = _useState10[0],
-      setFilter = _useState10[1]; //Var-Pagination
+      setFilter = _useState10[1];
 
-
-  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(1),
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(''),
       _useState12 = _slicedToArray(_useState11, 2),
-      currentPage = _useState12[0],
-      setCurrentPage = _useState12[1];
+      lastPage = _useState12[0],
+      setLastPage = _useState12[1];
 
-  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(50),
-      _useState14 = _slicedToArray(_useState13, 1),
-      clientsPage = _useState14[0];
-
-  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(3),
-      _useState16 = _slicedToArray(_useState15, 1),
-      numberItems = _useState16[0]; // Get current Clients
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(''),
+      _useState14 = _slicedToArray(_useState13, 2),
+      fullClients = _useState14[0],
+      setFullClients = _useState14[1]; //Var-Pagination
 
 
-  var indexOfLastPost = currentPage * clientsPage;
-  var indexOfFirstPost = indexOfLastPost - clientsPage;
-  var currentClients = dataclient.slice(indexOfFirstPost, indexOfLastPost); // Change page
+  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(1),
+      _useState16 = _slicedToArray(_useState15, 2),
+      currentPage = _useState16[0],
+      setCurrentPage = _useState16[1];
+
+  var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(50),
+      _useState18 = _slicedToArray(_useState17, 1),
+      clientsPage = _useState18[0];
+
+  var _useState19 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(3),
+      _useState20 = _slicedToArray(_useState19, 1),
+      numberItems = _useState20[0]; // Change page
+
 
   var paginate = function paginate(pageNumber) {
     return setCurrentPage(pageNumber);
@@ -71954,7 +71961,7 @@ var ListClient = function ListClient() {
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     loadClient();
     updateState();
-  }, [filter, formState.id]);
+  }, [filter, formState.id, currentPage]);
 
   var loadClient = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
@@ -71966,7 +71973,7 @@ var ListClient = function ListClient() {
               _context.prev = 0;
               setIsloaded(true);
               _context.next = 4;
-              return fetch("".concat(_UrlApp__WEBPACK_IMPORTED_MODULE_2__["default"], "/api/client/").concat(filter));
+              return fetch("".concat(_UrlApp__WEBPACK_IMPORTED_MODULE_2__["default"], "/api/client/").concat(filter, "?page=").concat(currentPage));
 
             case 4:
               res = _context.sent;
@@ -71975,22 +71982,25 @@ var ListClient = function ListClient() {
 
             case 7:
               dataResClient = _context.sent;
-              setDataclient(dataResClient);
+              console.log(dataResClient);
+              setFullClients(dataResClient.total);
+              setDataclient(dataResClient.data);
+              setLastPage(dataResClient.last_page);
               setIsloaded(false);
-              _context.next = 15;
+              _context.next = 18;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 15:
+              _context.prev = 15;
               _context.t0 = _context["catch"](0);
               setError(_context.t0);
 
-            case 15:
+            case 18:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 12]]);
+      }, _callee, null, [[0, 15]]);
     }));
 
     return function loadClient() {
@@ -72096,13 +72106,14 @@ var ListClient = function ListClient() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_tablelist__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    lists: currentClients,
+    lists: dataclient,
     isloaded: isloaded,
     onChange: handleChange,
     handleSelect: handleSelect
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_pagination__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_paginationCopy__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    lastPage: lastPage,
+    fullClients: fullClients,
     clientsPage: clientsPage,
-    fullClients: dataclient.length,
     paginate: paginate,
     currentPage: currentPage,
     numberItems: numberItems
@@ -72193,10 +72204,10 @@ var NotFound = function NotFound() {
 
 /***/ }),
 
-/***/ "./resources/js/components/pagination.js":
-/*!***********************************************!*\
-  !*** ./resources/js/components/pagination.js ***!
-  \***********************************************/
+/***/ "./resources/js/components/paginationCopy.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/paginationCopy.js ***!
+  \***************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -72207,23 +72218,35 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Pagination = function Pagination(_ref) {
-  var clientsPage = _ref.clientsPage,
+  var lastPage = _ref.lastPage,
       fullClients = _ref.fullClients,
       paginate = _ref.paginate,
       currentPage = _ref.currentPage,
-      numberItems = _ref.numberItems;
+      numberItems = _ref.numberItems,
+      clientsPage = _ref.clientsPage;
   var pageNumbers = [];
-  var fullPage = Math.ceil(fullClients / clientsPage);
-  var limit = currentPage + numberItems;
+  var fullPage = lastPage;
   var limitMax = fullPage - numberItems;
 
-  if (currentPage > limitMax) {
-    for (var i = limitMax; i <= fullPage; i++) {
+  if (lastPage <= numberItems) {
+    for (var i = 1; i <= lastPage; i++) {
       pageNumbers.push(i);
     }
   } else {
-    for (var _i = currentPage; _i <= limit; _i++) {
-      pageNumbers.push(_i);
+    if (currentPage >= limitMax) {
+      for (var _i = limitMax; _i <= fullPage; _i++) {
+        pageNumbers.push(_i);
+      }
+    } else {
+      if (currentPage <= numberItems) {
+        for (var _i2 = 1; _i2 <= numberItems; _i2++) {
+          pageNumbers.push(_i2);
+        }
+      } else {
+        for (var _i3 = currentPage - 1; _i3 <= currentPage + 1; _i3++) {
+          pageNumbers.push(_i3);
+        }
+      }
     }
   }
 
@@ -72261,7 +72284,7 @@ var Pagination = function Pagination(_ref) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     "aria-hidden": "true"
   }, "\xAB"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: currentPage < 2 ? 'd-none d-print-block' : 'page-item'
+    className: currentPage <= 3 ? 'd-none d-print-block' : 'page-item'
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "page-link text-success",
     onClick: function onClick() {

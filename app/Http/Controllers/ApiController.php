@@ -16,17 +16,19 @@ class ApiController extends Controller
     	//dd($Navs);
     	return response()->json($Navs);
     }
+
     public function client($filter)
     {
         if ($filter == 'all') {
-            $Dato = Client::select('id','name','nickname','email','phone','age','state')->get();
+            $Dato = Client::select('id','name','nickname','email','phone','age','state')->orderby('id','DESC')->paginate(50);
         }else{
-            $Dato = Client::select('id','name','nickname','email','phone','age','state')->where('state','=',$filter)->get();
+            $Dato = Client::select('id','name','nickname','email','phone','age','state')->where('state','=',$filter)->orderby('id','DESC')->paginate(50);
         }
     	
     	//dd($Dato);
     	return response()->json($Dato);
     }
+
     public function store(ClientRequest $request)
     {
         $client = new Client($request->all());

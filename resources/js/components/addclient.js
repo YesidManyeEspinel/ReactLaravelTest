@@ -69,7 +69,7 @@ const AddClient = () => {
     }
 
     return (
-        <div className="container center">
+        <div className="container card shadow p-2 mb-4 bg-white rounded">
             <FormClient
                 form={form}
                 onChange={handleChange}

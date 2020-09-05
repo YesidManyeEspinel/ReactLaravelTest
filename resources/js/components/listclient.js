@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import UrlApp from './UrlApp';
 import TableList from './tablelist';
-import Pagination from './pagination';
+//import Pagination from './pagination';
+import Pagination from './paginationCopy';
 import {BrowserRouter, Route, Switch, Link} from 'react-router-dom';
 
 const ListClient = () => {
@@ -10,28 +11,29 @@ const ListClient = () => {
     const [ formState, setFormState] = useState({id:false,state:''});
     const [ dataclient, setDataclient] = useState([]);
     const [ filter,setFilter ] = useState('all');
+    const [ lastPage,setLastPage ] = useState('');
+    const [ fullClients,setFullClients ] = useState('');
     //Var-Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [clientsPage] = useState(50);
     const [numberItems] = useState(3);
-    // Get current Clients
-    const indexOfLastPost = currentPage * clientsPage;
-    const indexOfFirstPost = indexOfLastPost - clientsPage;
-    const currentClients = dataclient.slice(indexOfFirstPost, indexOfLastPost);
     // Change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
     useEffect(() => {
         loadClient();
         updateState();
-    }, [filter,formState.id]);
+    }, [filter,formState.id,currentPage]);
 
     const loadClient = async () => {
         try{
             setIsloaded(true);
-            let res = await fetch(`${UrlApp}/api/client/${filter}`);
+            let res = await fetch(`${UrlApp}/api/client/${filter}?page=${currentPage}`);
             let dataResClient = await res.json();
-            setDataclient(dataResClient);
+            console.log(dataResClient);
+            setFullClients(dataResClient.total);
+            setDataclient(dataResClient.data);
+            setLastPage(dataResClient.last_page);
             setIsloaded(false);
         }catch(error){
             setError(error);
@@ -85,14 +87,15 @@ const ListClient = () => {
         <div className="container">
             
             <TableList
-                lists={currentClients}
+                lists={dataclient}
                 isloaded={isloaded}
                 onChange={handleChange}
                 handleSelect={handleSelect}
             />
             <Pagination
+                lastPage={lastPage}
+                fullClients={fullClients}
                 clientsPage={clientsPage}
-                fullClients={dataclient.length}
                 paginate={paginate}
                 currentPage={currentPage}
                 numberItems={numberItems}

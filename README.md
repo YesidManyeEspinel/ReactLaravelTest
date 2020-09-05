@@ -7,11 +7,15 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
-## DataBaseName 'testfullstack' => ./database(testfullstack).sql
+## React JS - Laravel 7
 
-FailHosting (Frontend) => (https://testfullstack.000webhostapp.com).
+URL => (https://testlaravelreact.herokuapp.com/).
 
-SuccessHosting (APILaravel) => (
-[GET]https://testfullstack.000webhostapp.com/api/navigation ,
-[GET,POST]https://testfullstack.000webhostapp.com/api/client).
+Frontend:
+	=>Bootstrap 4.5
+	=>Sweet Alert 2.1.2
+	=>React-router-dom 5.2.0
+	=>Implementacion de Hooks
 
+Backend:
+	=>Api
